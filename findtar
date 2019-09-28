@@ -10,7 +10,7 @@ function findtar_main() {
     shift
     eval echo \$${n}
   }
-  function arg_n() { get_n ${1:-0} "${args[@]}"; }
+  function arg_n() { get_n "${1:-0}" "${args[@]}"; }
   local dry_run='on'
   for OPT in "$@"; do
     case $OPT in
@@ -27,7 +27,7 @@ function findtar_main() {
       break
       ;;
     *)
-      local args=("${args[@]}" $1)
+      local args=("${args[@]}" "$1")
       ;;
     esac
     shift
@@ -35,7 +35,8 @@ function findtar_main() {
   { [[ -z $find_options ]] || [[ ${#args[@]} -lt 1 ]]; } && echo "$0 [options] [dst(dir, tar, tar.gz, tar.bz2)] -- [find commands]" && return 1
   [[ $src_root == ':' ]] && echo "$0 -r [src root dirpath]" && return 1
 
-  local dst=$(arg_n 0)
+  local dst
+  dst=$(arg_n 0)
   local last_ext=${dst##*.}
   local tar_opt=""
   local file_opt="-f"
@@ -55,9 +56,9 @@ function findtar_main() {
     echo "${PURPLE}#### dry-run ####${DEFAULT}" 1>&2
     echo "" 1>&2
     echo "${YELLOW}#### FYI: how to send files to remote host (tar, tar.gz, tar.bz2) ####${DEFAULT}" 1>&2
-    echo "find $@ -print0 | tar -c  -T - --null |& ssh \$HOST 'tar -C \$DIR -xv -'" 1>&2
-    echo "find $@ -print0 | tar -cz -T - --null |& ssh \$HOST 'tar -C \$DIR -xv -'" 1>&2
-    echo "find $@ -print0 | tar -cj -T - --null |& ssh \$HOST 'tar -C \$DIR -xv -'" 1>&2
+    echo "find $* -print0 | tar -c  -T - --null |& ssh \$HOST 'tar -C \$DIR -xv -'" 1>&2
+    echo "find $* -print0 | tar -cz -T - --null |& ssh \$HOST 'tar -C \$DIR -xv -'" 1>&2
+    echo "find $* -print0 | tar -cj -T - --null |& ssh \$HOST 'tar -C \$DIR -xv -'" 1>&2
     echo "${YELLOW}#### FYI: to run command not dry-run ####${DEFAULT}" 1>&2
     echo "${RED}add '-f' option before --" 1>&2
     return
