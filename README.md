@@ -1,6 +1,9 @@
 # findtar
 
 * `find` + `tar`
+* You can tar files filtered by find command.
+  * use case
+    * cache build outputs for `make` command
 
 ## how to use
 ```
