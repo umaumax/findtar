@@ -14,21 +14,21 @@ function findtar_main() {
   local dry_run='on'
   for OPT in "$@"; do
     case $OPT in
-    '-r')
-      local src_root=${1:-:}
-      shift
-      ;;
-    '-f')
-      local dry_run=''
-      ;;
-    '--')
-      local find_options='ok'
-      shift
-      break
-      ;;
-    *)
-      local args=("${args[@]}" "$1")
-      ;;
+      '-r')
+        local src_root=${1:-:}
+        shift
+        ;;
+      '-f')
+        local dry_run=''
+        ;;
+      '--')
+        local find_options='ok'
+        shift
+        break
+        ;;
+      *)
+        local args=("${args[@]}" "$1")
+        ;;
     esac
     shift
   done
